@@ -57,6 +57,7 @@ type UploadState = {
   lastTickTime: number
   retryCount: Map<number, number>
   maxRetries: number
+  lastProgressUpdate?: number
 }
 
 const uploads = new Map<string, UploadState>()
@@ -115,6 +116,19 @@ async function onMessage(msg: ClientMessage) {
       
       // Start processing active uploads if not a resumed session
       if (msg.type === 'start-upload') {
+        // Immediately send a progress update to transition from 'preparing' to 'uploading'
+        const initialProgress = {
+          sessionId: st.session.id,
+          filename: st.session.filename || 'Unknown',
+          bytesUploaded: 0,
+          totalBytes: st.session.size,
+          percent: 0,
+          speedBps: 0,
+          etaSeconds: null,
+          state: 'uploading' as const,
+          startedAt: st.startedAt
+        }
+        broadcast('upload-progress', { progress: initialProgress })
         processUploads()
       }
     }
@@ -122,7 +136,19 @@ async function onMessage(msg: ClientMessage) {
     const st = uploads.get(msg.sessionId)
     if (st && !st.cancelled) {
       st.paused = true
-      progress(msg.sessionId, 'paused')
+      // Send pause progress update
+      const progressUpdate = {
+        sessionId: st.session.id,
+        filename: st.session.filename || 'Unknown',
+        bytesUploaded: st.bytesUploaded,
+        totalBytes: st.session.size,
+        percent: (st.bytesUploaded / st.session.size) * 100,
+        speedBps: 0,
+        etaSeconds: null,
+        state: 'paused' as const,
+        startedAt: st.startedAt
+      }
+      broadcast('upload-progress', { progress: progressUpdate })
     }
   } else if (msg.type === 'resume-upload') {
     const st = uploads.get(msg.sessionId)
@@ -135,7 +161,19 @@ async function onMessage(msg: ClientMessage) {
     if (st) {
       st.cancelled = true
       st.paused = true
-      progress(msg.sessionId, 'cancelled')
+      // Send cancel progress update
+      const progressUpdate = {
+        sessionId: st.session.id,
+        filename: st.session.filename || 'Unknown',
+        bytesUploaded: st.bytesUploaded,
+        totalBytes: st.session.size,
+        percent: (st.bytesUploaded / st.session.size) * 100,
+        speedBps: 0,
+        etaSeconds: null,
+        state: 'cancelled' as const,
+        startedAt: st.startedAt
+      }
+      broadcast('upload-progress', { progress: progressUpdate })
       uploads.delete(msg.sessionId)
     }
   }
@@ -206,11 +244,36 @@ async function pump(sessionId: string) {
         st.inFlight--
         st.retryCount.delete(partNumber) // Clear retry count on success
         
-        progress(sessionId, 'uploading', st.partsCompleted[st.partsCompleted.length - 1])
+        // Update progress with the new part
+        const { speedBps, etaSeconds, percent } = estimate(st)
+        const progress: Progress = {
+          sessionId,
+          filename: st.session.filename || 'Unknown',
+          bytesUploaded: st.bytesUploaded,
+          totalBytes: st.session.size,
+          percent,
+          speedBps,
+          etaSeconds,
+          state: 'uploading',
+          startedAt: st.startedAt
+        }
+        broadcast('upload-progress', { progress })
 
         if (st.partsCompleted.length === totalParts) {
           await complete(st)
-          progress(sessionId, 'completed')
+          // Send final completion event
+          const finalProgress: Progress = {
+            sessionId,
+            filename: st.session.filename || 'Unknown',
+            bytesUploaded: st.session.size,
+            totalBytes: st.session.size,
+            percent: 100,
+            speedBps: 0,
+            etaSeconds: 0,
+            state: 'completed',
+            startedAt: st.startedAt
+          }
+          broadcast('upload-complete', { progress: finalProgress })
           uploads.delete(sessionId)
         } else {
           pump(sessionId)
@@ -329,21 +392,25 @@ async function throttledUpload(url: string, bytes: ArrayBuffer, st: UploadState,
     uploadedBytes += chunkBytes
     st.bytesUploaded += chunkBytes
     
-    // Broadcast progress update
-    const { speedBps, etaSeconds, percent } = estimate(st)
-    broadcast('upload-progress', {
-      progress: {
-        sessionId: st.session.id,
-        filename: st.session.filename || 'Unknown',
-        bytesUploaded: st.bytesUploaded,
-        totalBytes: st.session.size,
-        percent,
-        speedBps,
-        etaSeconds,
-        state: 'uploading',
-        startedAt: st.startedAt
-      }
-    })
+            // Broadcast progress updates more frequently for demo
+        const now = Date.now()
+        if (!st.lastProgressUpdate || now - st.lastProgressUpdate > 200) {
+          const { speedBps, etaSeconds, percent } = estimate(st)
+          const progress = {
+            sessionId: st.session.id,
+            filename: st.session.filename || 'Unknown',
+            bytesUploaded: st.bytesUploaded,
+            totalBytes: st.session.size,
+            percent,
+            speedBps,
+            etaSeconds,
+            state: 'uploading',
+            startedAt: st.startedAt
+          }
+          console.log('Broadcasting progress:', progress)
+          broadcast('upload-progress', { progress })
+          st.lastProgressUpdate = now
+        }
     
     // Add delay between chunks (except for last chunk)
     if (i < totalChunks - 1) {

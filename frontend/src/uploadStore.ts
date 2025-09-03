@@ -42,7 +42,9 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
       
       port.addEventListener('message', (ev: MessageEvent) => {
         const data = ev.data
+        console.log('Worker message received:', data)
         if (data?.type === 'upload-progress') {
+          console.log('Progress update received:', data.progress)
           get().updateProgress(data.progress.sessionId, data.progress)
         } else if (data?.type === 'upload-error') {
           const sessionId = data.sessionId || data.progress?.sessionId
@@ -59,8 +61,12 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
           }
         } else if (data?.type === 'upload-complete') {
           const progress = data.progress
-          get().updateProgress(progress.sessionId, progress)
-          showToast.success(`Upload complete: ${progress.filename}`)
+          // Only show completion toast if not already completed
+          const existingUpload = get().uploads.get(progress.sessionId)
+          if (existingUpload && existingUpload.progress.status !== 'completed') {
+            get().updateProgress(progress.sessionId, progress)
+            showToast.success(`Upload complete: ${progress.filename}`)
+          }
         }
       })
     } catch {
@@ -90,8 +96,12 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
           }
         } else if (data?.type === 'upload-complete') {
           const progress = data.progress
-          get().updateProgress(progress.sessionId, progress)
-          showToast.success(`Upload complete: ${progress.filename}`)
+          // Only show completion toast if not already completed
+          const existingUpload = get().uploads.get(progress.sessionId)
+          if (existingUpload && existingUpload.progress.status !== 'completed') {
+            get().updateProgress(progress.sessionId, progress)
+            showToast.success(`Upload complete: ${progress.filename}`)
+          }
         }
       })
     }
@@ -157,12 +167,17 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
   },
   
   updateProgress: (sessionId: string, progress: UploadProgress) => {
+    console.log('Updating progress for session:', sessionId, progress)
     set((state) => {
       const upload = state.uploads.get(sessionId)
-      if (!upload) return state
+      if (!upload) {
+        console.log('No upload found for session:', sessionId)
+        return state
+      }
       
       const newUploads = new Map(state.uploads)
       newUploads.set(sessionId, { ...upload, progress })
+      console.log('Updated uploads map:', Array.from(newUploads.entries()))
       return { uploads: newUploads }
     })
     

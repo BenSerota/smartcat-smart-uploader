@@ -6,3 +6,25 @@ You can now:
 1. cd backend && npm install && npm run dev
 2. cd frontend && npm run dev
 3. Open http://localhost:5173 to test the uploader!
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//_1WVyrHX9XwM/chat_full_no_code.txt, uploadId: aa27ac3e-c05d-422e-9220-7bd121595572
+PUT request - uploadId: aa27ac3e-c05d-422e-9220-7bd121595572, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//uIH8m1DPEM-R/201554151_05_08_25_041085.pdf, uploadId: bf498fd9-1388-490c-b789-31d3d1da845c
+PUT request - uploadId: bf498fd9-1388-490c-b789-31d3d1da845c, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//P1qmSugfDNFs/chat_full_no_code.txt, uploadId: 18ab8b14-ed57-4ec6-b216-d35f06ab967f
+PUT request - uploadId: 18ab8b14-ed57-4ec6-b216-d35f06ab967f, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//fn0SjXiukQbD/chat_export_no_code.txt, uploadId: eebb08be-926e-43dd-8e30-8e40a5a4b750
+PUT request - uploadId: eebb08be-926e-43dd-8e30-8e40a5a4b750, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//1DtJKSinmeRO/hilyte.png, uploadId: e1d3b5e4-dd8c-46a5-8deb-10ab09ec4c5b
+PUT request - uploadId: e1d3b5e4-dd8c-46a5-8deb-10ab09ec4c5b, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//9FHcsju9LqLa/AcroRdrSCADC2500120630_MUI.dmg, uploadId: e41e6320-bfb9-4361-ad4c-043ea455853f
+PUT request - uploadId: e41e6320-bfb9-4361-ad4c-043ea455853f, partNumber: 3, body type: object, isBuffer: true
+PUT request - uploadId: e41e6320-bfb9-4361-ad4c-043ea455853f, partNumber: 1, body type: object, isBuffer: true
+PUT request - uploadId: e41e6320-bfb9-4361-ad4c-043ea455853f, partNumber: 2, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//FfKWeyZEEQmH/chat_full_no_code.txt, uploadId: c7cfc990-8408-4279-b571-9f6f003ee9cc
+PUT request - uploadId: c7cfc990-8408-4279-b571-9f6f003ee9cc, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//y7ICPJJyQfng/123SAFIR.jpg, uploadId: da62d204-19d3-4652-9b13-af249634de8b
+PUT request - uploadId: da62d204-19d3-4652-9b13-af249634de8b, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//t4WywxailljZ/123SAFIR.jpg, uploadId: 04d394e3-ca7c-4795-bab5-0b02870936a3
+PUT request - uploadId: 04d394e3-ca7c-4795-bab5-0b02870936a3, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//nJTuXkByVyxw/Simplified_SAFIR_Framework.docx, uploadId: 3d50e536-d030-4509-8d0f-41f5f6f95a69
+PUT request - uploadId: 3d50e536-d030-4509-8d0f-41f5f6f95a69, partNumber: 1, body type: object, isBuffer: true
