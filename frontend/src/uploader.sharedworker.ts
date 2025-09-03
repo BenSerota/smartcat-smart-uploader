@@ -64,6 +64,9 @@ const ports: MessagePort[] = []
 const MAX_CONCURRENT_UPLOADS = 3
 const MAX_PART_CONCURRENCY = 3
 const MAX_RETRIES = 3
+const DEMO_MODE = true // Enable demo mode with slower uploads
+const DEMO_CHUNK_SIZE = 256 * 1024 // 256KB chunks for demo
+const DEMO_CHUNK_DELAY = 200 // 200ms delay between chunks
 
 function broadcast(type: string, payload: any) {
   for (const p of ports) {
@@ -184,11 +187,14 @@ async function pump(sessionId: string) {
         const url = await getPresignedUrl(st, partNumber)
         const { bytes, size } = await readChunk(st.ref, st.session.partSize, partNumber, st.session.size)
         
-        const res = await fetch(url, { 
-          method: 'PUT', 
-          body: bytes,
-          signal: AbortSignal.timeout(60000) // 60s timeout per part
-        })
+        // Upload with demo slowdown if enabled
+        const res = await (DEMO_MODE 
+          ? throttledUpload(url, bytes, st, size)
+          : fetch(url, { 
+              method: 'PUT', 
+              body: bytes,
+              signal: AbortSignal.timeout(60000) // 60s timeout per part
+            }))
         
         if (!res.ok) {
           throw new Error(`PUT part ${partNumber} failed: ${res.status}`)
@@ -306,6 +312,56 @@ function progress(sessionId: string, state: Progress['state'], lastPartCompleted
 }
 
 // Read a chunk from OPFS or Blob
+// Throttled upload for demo mode - simulates slower upload speed
+async function throttledUpload(url: string, bytes: ArrayBuffer, st: UploadState, totalSize: number): Promise<Response> {
+  // For demo, we'll simulate uploading in chunks with delays
+  const chunkSize = DEMO_CHUNK_SIZE
+  const totalChunks = Math.ceil(bytes.byteLength / chunkSize)
+  let uploadedBytes = 0
+  
+  // Simulate chunked upload progress
+  for (let i = 0; i < totalChunks; i++) {
+    const start = i * chunkSize
+    const end = Math.min(start + chunkSize, bytes.byteLength)
+    const chunkBytes = end - start
+    
+    // Update progress
+    uploadedBytes += chunkBytes
+    st.bytesUploaded += chunkBytes
+    
+    // Broadcast progress update
+    const { speedBps, etaSeconds, percent } = estimate(st)
+    broadcast('upload-progress', {
+      progress: {
+        sessionId: st.session.id,
+        filename: st.session.filename || 'Unknown',
+        bytesUploaded: st.bytesUploaded,
+        totalBytes: st.session.size,
+        percent,
+        speedBps,
+        etaSeconds,
+        state: 'uploading',
+        startedAt: st.startedAt
+      }
+    })
+    
+    // Add delay between chunks (except for last chunk)
+    if (i < totalChunks - 1) {
+      await new Promise(resolve => setTimeout(resolve, DEMO_CHUNK_DELAY))
+    }
+  }
+  
+  // Undo the bytes added during simulation (they'll be added properly after)
+  st.bytesUploaded -= bytes.byteLength
+  
+  // Now do the actual upload
+  return fetch(url, { 
+    method: 'PUT', 
+    body: bytes,
+    signal: AbortSignal.timeout(60000)
+  })
+}
+
 async function readChunk(ref: OPFSRef, partSize: number, partNumber: number, totalSize: number): Promise<{ bytes: ArrayBuffer, size: number }> {
   const start = (partNumber - 1) * partSize
   const end = Math.min(start + partSize, totalSize)

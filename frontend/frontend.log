@@ -2,8 +2,19 @@
 > smartcat-resumable-uploader-frontend@0.1.0 dev
 > vite
 
+Re-optimizing dependencies because lockfile has changed
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
 
-  VITE v5.4.19  ready in 135 ms
+[Failed to load PostCSS config: Failed to load PostCSS config (searchPath: /Users/benserota/Documents/Code Projects/smartcat-smart-uploader/frontend): [ReferenceError] module is not defined in ES module scope
+This file is being treated as an ES module because it has a '.js' file extension and '/Users/benserota/Documents/Code Projects/smartcat-smart-uploader/frontend/package.json' contains "type": "module". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.
+ReferenceError: module is not defined in ES module scope
+This file is being treated as an ES module because it has a '.js' file extension and '/Users/benserota/Documents/Code Projects/smartcat-smart-uploader/frontend/package.json' contains "type": "module". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.
+    at file:///Users/benserota/Documents/Code%20Projects/smartcat-smart-uploader/frontend/postcss.config.js:1:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async importDefault (file:///Users/benserota/Documents/Code%20Projects/smartcat-smart-uploader/frontend/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:33759:18)
+    at async Object.search (file:///Users/benserota/Documents/Code%20Projects/smartcat-smart-uploader/frontend/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:25915:23)]
 
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: use --host to expose
+Node.js v22.17.0
