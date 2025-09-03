@@ -23,8 +23,19 @@ app.use(cors({
   credentials: true,
   exposedHeaders: ['ETag', 'x-amz-version-id']
 }));
-app.use(express.json());
-app.use(express.raw({ type: '*/*', limit: '50mb' }));
+
+// Parse body based on content type and method
+app.use((req, res, next) => {
+  if (req.is('application/json')) {
+    express.json()(req, res, next);
+  } else {
+    // For all other content types (including binary), use raw
+    express.raw({ 
+      type: () => true, 
+      limit: '50mb' 
+    })(req, res, next);
+  }
+});
 
 // Health check
 app.get('/minio/health/live', (req, res) => {
@@ -32,10 +43,12 @@ app.get('/minio/health/live', (req, res) => {
 });
 
 // Create multipart upload
-app.post('/:bucket/:key+', (req, res) => {
+app.post('/:bucket/*', (req, res) => {
   if (req.query.uploads !== undefined) {
     const uploadId = uuidv4();
-    const key = req.params.key + req.params[0];
+    const key = req.params[0];
+    
+    console.log(`Creating multipart upload - bucket: ${req.params.bucket}, key: ${key}, uploadId: ${uploadId}`);
     
     multipartUploads.set(uploadId, {
       bucket: req.params.bucket,
@@ -92,9 +105,11 @@ app.post('/:bucket/:key+', (req, res) => {
 });
 
 // Upload part
-app.put('/:bucket/:key+', (req, res) => {
+app.put('/:bucket/*', (req, res) => {
   const uploadId = req.query.uploadId;
   const partNumber = parseInt(req.query.partNumber);
+  
+  console.log(`PUT request - uploadId: ${uploadId}, partNumber: ${partNumber}, body type: ${typeof req.body}, isBuffer: ${Buffer.isBuffer(req.body)}`);
   
   if (uploadId && partNumber) {
     // Handle multipart upload part
@@ -103,18 +118,30 @@ app.put('/:bucket/:key+', (req, res) => {
       return res.status(404).send('Upload not found');
     }
     
-    const etag = crypto.createHash('md5').update(req.body).digest('hex');
+    // Ensure we have a buffer
+    let body;
+    if (Buffer.isBuffer(req.body)) {
+      body = req.body;
+    } else if (req.body === undefined || req.body === null) {
+      console.error('No body received');
+      return res.status(400).send('No body received');
+    } else {
+      console.error('Invalid body type:', typeof req.body);
+      return res.status(400).send('Invalid body type');
+    }
+    
+    const etag = crypto.createHash('md5').update(body).digest('hex');
     upload.parts.set(partNumber, {
       etag: etag,
-      size: req.body.length,
-      data: req.body
+      size: body.length,
+      data: body
     });
     
     res.set('ETag', `"${etag}"`);
     res.status(200).send();
   } else {
     // Handle regular upload
-    const key = req.params.key + req.params[0];
+    const key = req.params[0];
     const filePath = path.join(uploadsDir, key);
     const dir = path.dirname(filePath);
     
@@ -122,8 +149,9 @@ app.put('/:bucket/:key+', (req, res) => {
       fs.mkdirSync(dir, { recursive: true });
     }
     
-    fs.writeFileSync(filePath, req.body);
-    const etag = crypto.createHash('md5').update(req.body).digest('hex');
+    const body = Buffer.isBuffer(req.body) ? req.body : Buffer.from(req.body);
+    fs.writeFileSync(filePath, body);
+    const etag = crypto.createHash('md5').update(body).digest('hex');
     
     res.set('ETag', `"${etag}"`);
     res.status(200).send();
@@ -131,8 +159,8 @@ app.put('/:bucket/:key+', (req, res) => {
 });
 
 // Get object (for testing)
-app.get('/:bucket/:key+', (req, res) => {
-  const key = req.params.key + req.params[0];
+app.get('/:bucket/*', (req, res) => {
+  const key = req.params[0];
   const filePath = path.join(uploadsDir, key);
   
   if (fs.existsSync(filePath)) {
@@ -145,6 +173,33 @@ app.get('/:bucket/:key+', (req, res) => {
 // Create bucket (mock)
 app.put('/:bucket', (req, res) => {
   res.status(200).send();
+});
+
+// Check if bucket exists (mock)
+app.head('/:bucket', (req, res) => {
+  res.status(200).send();
+});
+
+// List bucket contents (mock)
+app.get('/:bucket', (req, res) => {
+  res.set('Content-Type', 'application/xml');
+  res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+  <Name>${req.params.bucket}</Name>
+  <IsTruncated>false</IsTruncated>
+</ListBucketResult>`);
+});
+
+// Catch-all for unhandled requests - return proper XML error
+app.all('*', (req, res) => {
+  console.log(`Unhandled request: ${req.method} ${req.url}`);
+  res.status(404);
+  res.set('Content-Type', 'application/xml');
+  res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<Error>
+  <Code>NoSuchKey</Code>
+  <Message>The specified key does not exist.</Message>
+</Error>`);
 });
 
 app.listen(PORT, () => {
