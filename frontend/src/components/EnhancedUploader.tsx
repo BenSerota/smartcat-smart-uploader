@@ -67,11 +67,11 @@ const EnhancedUploader: React.FC = () => {
   const uploadingFiles = activeUploads.filter(u => u.progress.state === 'uploading')
   const preparingFiles = activeUploads.filter(u => u.progress.state === 'preparing')
   
-  // Debug logging
-  console.log('Uploads in component:', uploads)
-  console.log('Active uploads:', activeUploads)
-  console.log('Uploading files:', uploadingFiles)
-  console.log('Preparing files:', preparingFiles)
+  // Debug logging (commented out for production)
+  // console.log('Uploads in component:', uploads)
+  // console.log('Active uploads:', activeUploads)
+  // console.log('Uploading files:', uploadingFiles)
+  // console.log('Preparing files:', preparingFiles)
 
   return (
     <div className="max-w-4xl mx-auto p-8">
@@ -90,7 +90,7 @@ const EnhancedUploader: React.FC = () => {
             </div>
             <p className="text-base text-green-800 mb-4 leading-relaxed">
               <strong>Your files are now safely stored and uploading in the background.</strong> 
-              You can close this page, navigate to other sections, or continue working - we'll handle everything automatically!
+              You can navigate to other sections within Smartcat, and if you leave the website, your uploads will automatically resume when you return.
             </p>
             
             {/* Navigation Suggestions */}
@@ -168,7 +168,7 @@ const EnhancedUploader: React.FC = () => {
         </div>
       </div>
 
-      {/* Active Uploads Section */}
+      {/* Active Uploads Section - Only show when there are actual uploads */}
       {hasActiveUploads && (
         <div className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -238,7 +238,7 @@ const EnhancedUploader: React.FC = () => {
                     </div>
                   </div>
                   
-                  {/* Enhanced Progress Bar */}
+                  {/* Progress Bar - Only show for actual uploads */}
                   <div className="mb-3">
                     <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
                       <span className="font-medium">{percentage}% Complete</span>
@@ -299,83 +299,12 @@ const EnhancedUploader: React.FC = () => {
         </div>
       )}
 
-      {/* DEMO: Show fake progress bar if no uploads */}
-      {!hasActiveUploads && (
-        <div className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50">
-            <h3 className="text-lg font-semibold text-gray-900">Demo Progress Bar</h3>
-            <p className="text-sm text-gray-600">This shows what the progress bar will look like during uploads</p>
-          </div>
-          <div className="p-6">
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center space-x-3">
-                  <File className="w-8 h-8 text-purple-600" />
-                  <div>
-                    <h4 className="font-medium text-gray-900">demo-file.pdf</h4>
-                    <p className="text-sm text-gray-500">2.5 MB / 2.5 MB</p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Demo Progress Bar */}
-              <div className="mb-3">
-                <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-                  <span className="font-medium">67% Complete</span>
-                  <span className="text-purple-600 font-medium">Uploading...</span>
-                </div>
-                <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500"
-                    style={{ width: '67%' }}
-                  >
-                    <div className="h-full bg-white/20 animate-pulse"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Demo Status */}
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center space-x-4 text-gray-600">
-                  <span className="flex items-center space-x-1">
-                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                    <span>1.2 MB/s</span>
-                  </span>
-                  <span className="flex items-center space-x-1">
-                    <Clock className="w-4 h-4" />
-                    <span>ETA: 2s</span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Smart Background Uploads Info Box */}
-      <div className="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
-        <div className="flex items-start space-x-4">
-          <div className="flex-shrink-0">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-blue-600" />
-            </div>
-          </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-blue-900 mb-2">Smart Background Uploads</h3>
-            <p className="text-blue-800 mb-4">
-              Your files continue uploading even when you navigate to other sections. 
-              <strong> If you close your browser, we'll automatically resume from where you left off when you return.</strong>
-            </p>
-            <div className="bg-white rounded-lg p-4 border border-blue-200">
-              <p className="text-sm font-medium text-blue-900 mb-2">🚀 How it works:</p>
-              <ul className="text-sm text-blue-800 space-y-1">
-                <li>• <strong>Instant Save:</strong> File is saved to your account immediately</li>
-                <li>• <strong>Background Upload:</strong> Continues while you work elsewhere</li>
-                <li>• <strong>Auto-Resume:</strong> Picks up where it left off if interrupted</li>
-                <li>• <strong>Smart Notifications:</strong> Get notified when uploads complete</li>
-              </ul>
-            </div>
-          </div>
+      {/* Minimal Smart Background Uploads Info */}
+      <div className="mt-6 bg-blue-50 rounded-lg p-4 flex items-center space-x-3">
+        <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
+        <div className="text-sm text-blue-800">
+          <p className="font-medium mb-1">Smart Background Uploads</p>
+          <p>Your files continue uploading even when you navigate to other sections. If you close your browser, we'll automatically resume from where you left off when you return.</p>
         </div>
       </div>
     </div>

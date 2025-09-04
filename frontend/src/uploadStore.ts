@@ -63,9 +63,14 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
           const progress = data.progress
           // Only show completion toast if not already completed
           const existingUpload = get().uploads.get(progress.sessionId)
-          if (existingUpload && existingUpload.progress.status !== 'completed') {
+          if (existingUpload && existingUpload.progress.state !== 'completed') {
             get().updateProgress(progress.sessionId, progress)
             showToast.success(`Upload complete: ${progress.filename}`)
+            
+            // Clean up completed upload from storage after a delay
+            setTimeout(() => {
+              get().removeUpload(progress.sessionId)
+            }, 5000) // Remove after 5 seconds
           }
         }
       })
@@ -98,9 +103,14 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
           const progress = data.progress
           // Only show completion toast if not already completed
           const existingUpload = get().uploads.get(progress.sessionId)
-          if (existingUpload && existingUpload.progress.status !== 'completed') {
+          if (existingUpload && existingUpload.progress.state !== 'completed') {
             get().updateProgress(progress.sessionId, progress)
             showToast.success(`Upload complete: ${progress.filename}`)
+            
+            // Clean up completed upload from storage after a delay
+            setTimeout(() => {
+              get().removeUpload(progress.sessionId)
+            }, 5000) // Remove after 5 seconds
           }
         }
       })
@@ -241,7 +251,23 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
     try {
       const storedSessions = await getStoredSessions()
       
-      for (const stored of storedSessions) {
+      // Filter out completed uploads and only resume active ones
+      const activeSessions = storedSessions.filter(stored => 
+        stored.progress.state !== 'completed' && stored.progress.state !== 'cancelled'
+      )
+      
+      if (activeSessions.length === 0) {
+        return // No active sessions to resume
+      }
+      
+      // Show a single summary toast instead of individual ones
+      if (activeSessions.length === 1) {
+        showToast.info(`Resuming upload: ${activeSessions[0].filename}`)
+      } else {
+        showToast.info(`Resuming ${activeSessions.length} uploads`)
+      }
+      
+      for (const stored of activeSessions) {
         // Only resume if not already in active uploads
         if (!get().uploads.has(stored.session.id)) {
           // Create a placeholder file object
@@ -271,8 +297,6 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
               ref: { kind: 'opfs', path: ['uploads', `${stored.session.id}.bin`] }
             })
           }
-          
-          showToast.info(`Resuming upload: ${stored.filename}`)
         }
       }
     } catch (error) {

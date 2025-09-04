@@ -392,25 +392,25 @@ async function throttledUpload(url: string, bytes: ArrayBuffer, st: UploadState,
     uploadedBytes += chunkBytes
     st.bytesUploaded += chunkBytes
     
-            // Broadcast progress updates more frequently for demo
-        const now = Date.now()
-        if (!st.lastProgressUpdate || now - st.lastProgressUpdate > 200) {
-          const { speedBps, etaSeconds, percent } = estimate(st)
-          const progress = {
-            sessionId: st.session.id,
-            filename: st.session.filename || 'Unknown',
-            bytesUploaded: st.bytesUploaded,
-            totalBytes: st.session.size,
-            percent,
-            speedBps,
-            etaSeconds,
-            state: 'uploading',
-            startedAt: st.startedAt
-          }
-          console.log('Broadcasting progress:', progress)
-          broadcast('upload-progress', { progress })
-          st.lastProgressUpdate = now
-        }
+    // Broadcast progress updates more frequently for demo
+    const now = Date.now()
+    if (!st.lastProgressUpdate || now - st.lastProgressUpdate > 200) {
+      const { speedBps, etaSeconds, percent } = estimate(st)
+      const progress = {
+        sessionId: st.session.id,
+        filename: st.session.filename || 'Unknown',
+        bytesUploaded: st.bytesUploaded,
+        totalBytes: st.session.size,
+        percent,
+        speedBps,
+        etaSeconds,
+        state: 'uploading',
+        startedAt: st.startedAt
+      }
+      console.log('Broadcasting progress:', progress)
+      broadcast('upload-progress', { progress })
+      st.lastProgressUpdate = now
+    }
     
     // Add delay between chunks (except for last chunk)
     if (i < totalChunks - 1) {
@@ -418,15 +418,41 @@ async function throttledUpload(url: string, bytes: ArrayBuffer, st: UploadState,
     }
   }
   
+  // Ensure minimum upload time for demo (at least 3 seconds)
+  const elapsed = Date.now() - st.startedAt
+  const minUploadTime = 3000 // 3 seconds minimum
+  if (elapsed < minUploadTime) {
+    await new Promise(resolve => setTimeout(resolve, minUploadTime - elapsed))
+  }
+  
   // Undo the bytes added during simulation (they'll be added properly after)
   st.bytesUploaded -= bytes.byteLength
   
-  // Now do the actual upload
-  return fetch(url, { 
+  // Now do the actual upload with progress simulation
+  const response = await fetch(url, { 
     method: 'PUT', 
     body: bytes,
     signal: AbortSignal.timeout(60000)
   })
+  
+  // If successful, update progress to show completion
+  if (response.ok) {
+    st.bytesUploaded = st.session.size
+    const finalProgress = {
+      sessionId: st.session.id,
+      filename: st.session.filename || 'Unknown',
+      bytesUploaded: st.session.size,
+      totalBytes: st.session.size,
+      percent: 100,
+      speedBps: 0,
+      etaSeconds: 0,
+      state: 'completed',
+      startedAt: st.startedAt
+    }
+    broadcast('upload-progress', { progress: finalProgress })
+  }
+  
+  return response
 }
 
 async function readChunk(ref: OPFSRef, partSize: number, partNumber: number, totalSize: number): Promise<{ bytes: ArrayBuffer, size: number }> {

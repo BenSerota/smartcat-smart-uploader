@@ -28,3 +28,17 @@ Creating multipart upload - bucket: smartcat-uploads, key: uploads//t4WywxailljZ
 PUT request - uploadId: 04d394e3-ca7c-4795-bab5-0b02870936a3, partNumber: 1, body type: object, isBuffer: true
 Creating multipart upload - bucket: smartcat-uploads, key: uploads//nJTuXkByVyxw/Simplified_SAFIR_Framework.docx, uploadId: 3d50e536-d030-4509-8d0f-41f5f6f95a69
 PUT request - uploadId: 3d50e536-d030-4509-8d0f-41f5f6f95a69, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//c4y-kJUaM6YX/123SAFIR.jpg, uploadId: cc3568b6-7659-4867-a514-ec1a66632527
+PUT request - uploadId: cc3568b6-7659-4867-a514-ec1a66632527, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//MWA36EnmrJkt/Simplified_SAFIR_Framework.docx, uploadId: 8201f2e3-e796-429c-ac1d-0c3799c24e1a
+PUT request - uploadId: 8201f2e3-e796-429c-ac1d-0c3799c24e1a, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//fm6xyRO8BOAe/123SAFIR.jpg, uploadId: fa3f92db-8657-4d6c-a4a4-0afc6cde590b
+PUT request - uploadId: fa3f92db-8657-4d6c-a4a4-0afc6cde590b, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//6qnIM-9b01ZC/Simplified_SAFIR_Framework.docx, uploadId: 82d30f53-8c25-4420-a21a-2706fd055824
+PUT request - uploadId: 82d30f53-8c25-4420-a21a-2706fd055824, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//SvzqlkqZyqCn/Simplified_SAFIR_Framework.docx, uploadId: 4aebf3ef-4d48-48a7-8354-1b8f29f795ee
+PUT request - uploadId: 4aebf3ef-4d48-48a7-8354-1b8f29f795ee, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//TAZ1EJHK4sCi/123SAFIR.jpg, uploadId: da6fa1cd-5f51-4c78-8ad8-0f2d2c8e2fe6
+PUT request - uploadId: da6fa1cd-5f51-4c78-8ad8-0f2d2c8e2fe6, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//NrynTRmCcepf/chat_export_no_code.txt, uploadId: ba464317-bb88-47e6-a1a2-a97febafbe75
+PUT request - uploadId: ba464317-bb88-47e6-a1a2-a97febafbe75, partNumber: 1, body type: object, isBuffer: true
