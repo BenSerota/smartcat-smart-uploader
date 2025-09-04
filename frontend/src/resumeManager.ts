@@ -1,5 +1,5 @@
 import { get, set, del, keys } from 'idb-keyval'
-import type { UploadSession, UploadProgress } from './uploadTypes'
+import type { UploadSession, UploadProgress, UploadedPart } from './uploadTypes'
 import { opfsFileExists } from './opfs'
 
 interface StoredSession {
@@ -7,17 +7,21 @@ interface StoredSession {
   progress: UploadProgress
   filename: string
   lastUpdated: number
+  partsCompleted: UploadedPart[]
+  nextPart: number
 }
 
 const SESSION_PREFIX = 'upload_session_'
 const SESSION_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
 
-export async function saveSession(sessionId: string, session: UploadSession, progress: UploadProgress) {
+export async function saveSession(sessionId: string, session: UploadSession, progress: UploadProgress, partsCompleted: UploadedPart[] = [], nextPart: number = 1) {
   const stored: StoredSession = {
     session,
     progress,
     filename: progress.filename,
-    lastUpdated: Date.now()
+    lastUpdated: Date.now(),
+    partsCompleted,
+    nextPart
   }
   await set(`${SESSION_PREFIX}${sessionId}`, stored)
 }

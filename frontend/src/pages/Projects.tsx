@@ -1,7 +1,23 @@
-import React from 'react'
-import { FolderOpen, Plus, Search, Filter } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { FolderOpen, Plus, Search, Filter, ArrowLeft } from 'lucide-react'
+import ProjectBuilder from '../components/ProjectBuilder'
+import { useUploadStore } from '../uploadStore'
 
 const Projects: React.FC = () => {
+  const { uploads } = useUploadStore()
+  const [showNewProject, setShowNewProject] = useState(false)
+  const [manualOverride, setManualOverride] = useState(false)
+
+  // Check if there are active uploads or files to show project creation state
+  useEffect(() => {
+    const hasUploads = Array.from(uploads.values()).length > 0
+    if (hasUploads && !manualOverride) {
+      setShowNewProject(true)
+    } else if (!hasUploads) {
+      setShowNewProject(false)
+      setManualOverride(false) // Reset manual override when no uploads
+    }
+  }, [uploads, manualOverride])
   const projects = [
     { id: 1, name: 'Website Localization Q1', languages: 'EN → FR, DE, ES', words: '12,450', deadline: '2024-02-15', status: 'In Progress' },
     { id: 2, name: 'Mobile App Translation', languages: 'EN → JP, KR', words: '8,320', deadline: '2024-02-10', status: 'Review' },
@@ -9,12 +25,38 @@ const Projects: React.FC = () => {
     { id: 4, name: 'Technical Documentation', languages: 'EN → ZH, RU', words: '23,100', deadline: '2024-03-01', status: 'In Progress' },
   ]
 
+  if (showNewProject) {
+    return (
+      <div className="p-6">
+        <div className="mb-6">
+          <button
+            onClick={() => {
+              setShowNewProject(false)
+              setManualOverride(true)
+            }}
+            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors mb-4"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Projects</span>
+          </button>
+        </div>
+        <ProjectBuilder />
+      </div>
+    )
+  }
+
   return (
     <div className="p-6">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-semibold">Projects</h1>
-          <button className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors flex items-center space-x-2">
+          <button 
+            onClick={() => {
+              setShowNewProject(true)
+              setManualOverride(false)
+            }}
+            className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors flex items-center space-x-2"
+          >
             <Plus className="w-4 h-4" />
             <span>New Project</span>
           </button>

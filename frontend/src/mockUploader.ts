@@ -1,153 +1,132 @@
-import type { UploadProgress } from './uploadTypes'
+// Mock uploader that simulates realistic upload progress over 3 minutes
+import { useUploadStore } from './uploadStore'
 
-export interface MockUploadSession {
-  id: string
-  filename: string
-  size: number
-  contentType: string
-}
+export class MockUploader {
+  private uploads = new Map<string, {
+    file: File
+    startTime: number
+    totalBytes: number
+    bytesUploaded: number
+    speedBps: number
+    intervalId: NodeJS.Timeout
+  }>()
 
-export interface MockUploadCallbacks {
-  onProgress: (sessionId: string, progress: UploadProgress) => void
-  onComplete: (sessionId: string, progress: UploadProgress) => void
-  onError: (sessionId: string, error: string) => void
-}
-
-class MockUploader {
-  private activeUploads = new Map<string, NodeJS.Timeout>()
-  private callbacks: MockUploadCallbacks | null = null
-
-  setCallbacks(callbacks: MockUploadCallbacks) {
-    this.callbacks = callbacks
-  }
-
-  startUpload(session: MockUploadSession) {
-    const sessionId = session.id
-    const totalBytes = session.size
-    let bytesUploaded = 0
+  startMockUpload(file: File, sessionId: string) {
+    const totalBytes = file.size
     const startTime = Date.now()
+    const duration = 3 * 60 * 1000 // 3 minutes in milliseconds
     
-    // Simulate realistic upload speed (1-5 MB/s)
-    const baseSpeed = 2 * 1024 * 1024 // 2 MB/s base
-    const speedVariation = 1.5 * 1024 * 1024 // ±1.5 MB/s variation
-    const speed = baseSpeed + (Math.random() - 0.5) * speedVariation
+    // Calculate realistic speed (varies between 1-5 MB/s)
+    const baseSpeed = (totalBytes / duration) * (0.8 + Math.random() * 0.4) // ±20% variation
     
-    const updateProgress = () => {
-      if (!this.callbacks) return
-      
-      const elapsed = (Date.now() - startTime) / 1000
-      const targetBytes = Math.min(totalBytes, (speed * elapsed))
-      
-      // Add some randomness to make it feel more realistic
-      const randomFactor = 0.8 + Math.random() * 0.4 // 0.8 to 1.2
-      bytesUploaded = Math.min(totalBytes, targetBytes * randomFactor)
-      
-      const percent = Math.round((bytesUploaded / totalBytes) * 100)
-      const currentSpeed = bytesUploaded / elapsed
-      const remainingBytes = totalBytes - bytesUploaded
-      const etaSeconds = remainingBytes / currentSpeed
-      
-      const progress: UploadProgress = {
-        sessionId,
-        filename: session.filename,
-        bytesUploaded: Math.round(bytesUploaded),
-        totalBytes,
-        percent,
-        speedBps: currentSpeed,
-        etaSeconds: etaSeconds > 0 ? Math.round(etaSeconds) : 0,
-        state: 'uploading',
-        startedAt: startTime
-      }
-      
-      this.callbacks.onProgress(sessionId, progress)
-      
-      // Check if upload is complete
-      if (bytesUploaded >= totalBytes) {
-        this.completeUpload(sessionId, progress)
-      }
+    const upload = {
+      file,
+      startTime,
+      totalBytes,
+      bytesUploaded: 0,
+      speedBps: baseSpeed,
+      intervalId: setInterval(() => {
+        this.updateProgress(sessionId, totalBytes, startTime, baseSpeed)
+      }, 100) // Update every 100ms
     }
     
-    // Update progress every 200ms
-    const interval = setInterval(updateProgress, 200)
-    this.activeUploads.set(sessionId, interval)
+    this.uploads.set(sessionId, upload)
     
-    // Start with preparing state
-    setTimeout(() => {
-      if (this.callbacks) {
-        const preparingProgress: UploadProgress = {
-          sessionId,
-          filename: session.filename,
-          bytesUploaded: 0,
-          totalBytes,
-          percent: 0,
-          speedBps: 0,
-          etaSeconds: null,
-          state: 'preparing',
-          startedAt: startTime
-        }
-        this.callbacks.onProgress(sessionId, preparingProgress)
-      }
-    }, 100)
-    
-    // Start uploading after 1 second
-    setTimeout(() => {
-      updateProgress()
-    }, 1000)
+    // Initial progress update
+    this.updateProgress(sessionId, totalBytes, startTime, baseSpeed)
   }
-  
-  pauseUpload(sessionId: string) {
-    const interval = this.activeUploads.get(sessionId)
-    if (interval) {
-      clearInterval(interval)
-      this.activeUploads.delete(sessionId)
-    }
+
+  private updateProgress(sessionId: string, totalBytes: number, startTime: number, baseSpeed: number) {
+    const elapsed = Date.now() - startTime
+    const duration = 3 * 60 * 1000 // 3 minutes
     
-    if (this.callbacks) {
-      // Send paused state
-      this.callbacks.onProgress(sessionId, {
+    // Use a smooth curve for progress (starts slow, speeds up, then slows down)
+    const progress = Math.min(elapsed / duration, 1)
+    const smoothProgress = this.smoothProgress(progress)
+    
+    const bytesUploaded = Math.min(Math.floor(totalBytes * smoothProgress), totalBytes)
+    const percent = (bytesUploaded / totalBytes) * 100
+    
+    // Calculate realistic speed with some variation
+    const speedVariation = 0.7 + Math.random() * 0.6 // ±30% variation
+    const currentSpeed = baseSpeed * speedVariation
+    
+    // Calculate ETA
+    const remainingBytes = totalBytes - bytesUploaded
+    const etaSeconds = remainingBytes > 0 && currentSpeed > 0 ? remainingBytes / currentSpeed : 0
+    
+    const state = percent >= 100 ? 'completed' : 'uploading'
+    
+    // Update the upload store
+    const { updateProgress } = useUploadStore.getState()
+    updateProgress(sessionId, {
+      sessionId,
+      filename: this.uploads.get(sessionId)?.file.name || 'document.pdf',
+      bytesUploaded,
+      totalBytes,
+      percent,
+      speedBps: currentSpeed,
+      etaSeconds: etaSeconds > 0 ? etaSeconds : null,
+      state: state as any,
+      startedAt: startTime
+    })
+    
+    // Clean up when completed
+    if (percent >= 100) {
+      const upload = this.uploads.get(sessionId)
+      if (upload) {
+        clearInterval(upload.intervalId)
+        this.uploads.delete(sessionId)
+      }
+    }
+  }
+
+  private smoothProgress(progress: number): number {
+    // Smooth curve: starts slow, speeds up in middle, slows down at end
+    if (progress < 0.1) {
+      return progress * progress * 10 // Slow start
+    } else if (progress < 0.9) {
+      return 0.01 + (progress - 0.1) * 1.25 // Steady middle
+    } else {
+      const endProgress = (progress - 0.9) * 10
+      return 0.91 + endProgress * endProgress * 0.9 // Slow finish
+    }
+  }
+
+  pauseUpload(sessionId: string) {
+    const upload = this.uploads.get(sessionId)
+    if (upload) {
+      clearInterval(upload.intervalId)
+      const { updateProgress } = useUploadStore.getState()
+      updateProgress(sessionId, {
         sessionId,
-        filename: '',
-        bytesUploaded: 0,
-        totalBytes: 0,
-        percent: 0,
+        filename: upload.file.name,
+        bytesUploaded: upload.bytesUploaded,
+        totalBytes: upload.totalBytes,
+        percent: (upload.bytesUploaded / upload.totalBytes) * 100,
         speedBps: 0,
         etaSeconds: null,
         state: 'paused',
-        startedAt: Date.now()
+        startedAt: upload.startTime
       })
     }
   }
-  
-  resumeUpload(sessionId: string, session: MockUploadSession) {
-    // Restart the upload simulation
-    this.startUpload(session)
+
+  resumeUpload(sessionId: string) {
+    const upload = this.uploads.get(sessionId)
+    if (upload) {
+      // Restart the interval
+      upload.intervalId = setInterval(() => {
+        this.updateProgress(sessionId, upload.totalBytes, upload.startTime, upload.speedBps)
+      }, 100)
+    }
   }
-  
+
   cancelUpload(sessionId: string) {
-    const interval = this.activeUploads.get(sessionId)
-    if (interval) {
-      clearInterval(interval)
-      this.activeUploads.delete(sessionId)
-    }
-  }
-  
-  private completeUpload(sessionId: string, finalProgress: UploadProgress) {
-    const interval = this.activeUploads.get(sessionId)
-    if (interval) {
-      clearInterval(interval)
-      this.activeUploads.delete(sessionId)
-    }
-    
-    if (this.callbacks) {
-      const completedProgress: UploadProgress = {
-        ...finalProgress,
-        state: 'completed',
-        percent: 100,
-        speedBps: 0,
-        etaSeconds: 0
-      }
-      
-      this.callbacks.onComplete(sessionId, completedProgress)
+    const upload = this.uploads.get(sessionId)
+    if (upload) {
+      clearInterval(upload.intervalId)
+      this.uploads.delete(sessionId)
     }
   }
 }
