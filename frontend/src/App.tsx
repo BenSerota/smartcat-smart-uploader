@@ -4,7 +4,6 @@ import Layout from './components/Layout'
 import Projects from './pages/Projects'
 import Drive from './pages/Drive'
 import Orders from './pages/Orders'
-import { ToastContainer } from './components/Toast'
 
 // Placeholder pages
 const Home = () => (
@@ -47,7 +46,6 @@ export default function App() {
             <Route path="/settings" element={<Navigate to="/projects" />} />
           </Routes>
         </Layout>
-        <ToastContainer />
       </>
     </Router>
   )

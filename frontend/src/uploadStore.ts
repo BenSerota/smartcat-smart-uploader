@@ -2,7 +2,6 @@ import { create } from 'zustand'
 import type { UploadItem, UploadProgress } from './uploadTypes'
 import { createUploadSession } from './api'
 import { stageFileToOPFS, type OPFSRef, removeFromOPFS } from './opfs'
-import { showToast } from './toastStore'
 import { saveSession, updateSessionProgress, removeSession, getStoredSessions } from './resumeManager'
 
 type WorkerPort = MessagePort & { _sc?: true }
@@ -42,9 +41,7 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
       
       port.addEventListener('message', (ev: MessageEvent) => {
         const data = ev.data
-        console.log('Worker message received:', data)
         if (data?.type === 'upload-progress') {
-          console.log('Progress update received:', data.progress)
           get().updateProgress(data.progress.sessionId, data.progress)
         } else if (data?.type === 'upload-error') {
           const sessionId = data.sessionId || data.progress?.sessionId
@@ -56,7 +53,6 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
                 newUploads.set(sessionId, { ...upload, error: data.error })
                 return { uploads: newUploads }
               })
-              showToast.error(`Upload failed: ${data.error}`)
             }
           }
         } else if (data?.type === 'upload-complete') {
@@ -65,12 +61,11 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
           const existingUpload = get().uploads.get(progress.sessionId)
           if (existingUpload && existingUpload.progress.state !== 'completed') {
             get().updateProgress(progress.sessionId, progress)
-            showToast.success(`Upload complete: ${progress.filename}`)
             
             // Clean up completed upload from storage after a delay
             setTimeout(() => {
               get().removeUpload(progress.sessionId)
-            }, 5000) // Remove after 5 seconds
+            }, 30000) // Remove after 30 seconds to allow success banner to show
           }
         }
       })
@@ -96,7 +91,6 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
                 newUploads.set(sessionId, { ...upload, error: data.error })
                 return { uploads: newUploads }
               })
-              showToast.error(`Upload failed: ${data.error}`)
             }
           }
         } else if (data?.type === 'upload-complete') {
@@ -105,12 +99,11 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
           const existingUpload = get().uploads.get(progress.sessionId)
           if (existingUpload && existingUpload.progress.state !== 'completed') {
             get().updateProgress(progress.sessionId, progress)
-            showToast.success(`Upload complete: ${progress.filename}`)
             
             // Clean up completed upload from storage after a delay
             setTimeout(() => {
               get().removeUpload(progress.sessionId)
-            }, 5000) // Remove after 5 seconds
+            }, 30000) // Remove after 30 seconds to allow success banner to show
           }
         }
       })
@@ -169,25 +162,20 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
         // Save session to IndexedDB
         await saveSession(session.id, session, uploadItem.progress!)
         
-        showToast.info(`Starting upload: ${file.name}`)
       } catch (error) {
-        showToast.error(`Failed to start upload for ${file.name}: ${error}`)
       }
     }
   },
   
   updateProgress: (sessionId: string, progress: UploadProgress) => {
-    console.log('Updating progress for session:', sessionId, progress)
     set((state) => {
       const upload = state.uploads.get(sessionId)
       if (!upload) {
-        console.log('No upload found for session:', sessionId)
         return state
       }
       
       const newUploads = new Map(state.uploads)
       newUploads.set(sessionId, { ...upload, progress })
-      console.log('Updated uploads map:', Array.from(newUploads.entries()))
       return { uploads: newUploads }
     })
     
@@ -233,7 +221,6 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
     
     // Remove from store
     get().removeUpload(sessionId)
-    showToast.info('Upload cancelled')
   },
   
   removeUpload: (sessionId: string) => {
@@ -262,9 +249,7 @@ export const useUploadStore = create<UploadStore>((set, get) => ({
       
       // Show a single summary toast instead of individual ones
       if (activeSessions.length === 1) {
-        showToast.info(`Resuming upload: ${activeSessions[0].filename}`)
       } else {
-        showToast.info(`Resuming ${activeSessions.length} uploads`)
       }
       
       for (const stored of activeSessions) {

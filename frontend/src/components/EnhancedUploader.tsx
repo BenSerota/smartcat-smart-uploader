@@ -17,18 +17,24 @@ const EnhancedUploader: React.FC = () => {
 
   // Show success message immediately when files are added
   useEffect(() => {
-    const newFiles = Object.values(uploads).filter(u => 
-      u.progress.state === 'preparing' || 
-      (u.progress.state === 'uploading' && u.progress.percent < 5)
+    const newFiles = Array.from(uploads.values()).filter(u => 
+      u.progress && (
+        u.progress.state === 'preparing' || 
+        u.progress.state === 'uploading' ||
+        u.progress.state === 'completed'
+      )
     )
     
     if (newFiles.length > 0) {
       setShowSuccessMessage(true)
       // Keep showing for longer to encourage navigation
-      setTimeout(() => setShowSuccessMessage(false), 15000)
+      setTimeout(() => setShowSuccessMessage(false), 25000)
       
       // Track recently added files for better UX
-      setRecentlyAddedFiles(newFiles.map(f => f.progress.filename))
+      setRecentlyAddedFiles(newFiles.map(f => f.progress?.filename || ''))
+    } else {
+      // Hide success message when no uploads
+      setShowSuccessMessage(false)
     }
   }, [uploads])
 
@@ -62,119 +68,154 @@ const EnhancedUploader: React.FC = () => {
     return `${Math.round(seconds / 3600)}h ${Math.round((seconds % 3600) / 60)}m`
   }
 
-  const activeUploads = Object.values(uploads).filter(u => u.progress.state !== 'completed')
+  const activeUploads = Array.from(uploads.values()).filter(u => u.progress && u.progress.state !== 'completed')
   const hasActiveUploads = activeUploads.length > 0
-  const uploadingFiles = activeUploads.filter(u => u.progress.state === 'uploading')
-  const preparingFiles = activeUploads.filter(u => u.progress.state === 'preparing')
+  const uploadingFiles = activeUploads.filter(u => u.progress && u.progress.state === 'uploading')
+  const preparingFiles = activeUploads.filter(u => u.progress && u.progress.state === 'preparing')
+  const recentlyCompleted = Array.from(uploads.values()).filter(u => u.progress && u.progress.state === 'completed')
   
-  // Debug logging (commented out for production)
-  // console.log('Uploads in component:', uploads)
-  // console.log('Active uploads:', activeUploads)
-  // console.log('Uploading files:', uploadingFiles)
-  // console.log('Preparing files:', preparingFiles)
-
+  // Debug logging for troubleshooting
+  console.log('Uploads in component:', uploads)
+  console.log('Active uploads:', activeUploads)
+  console.log('Uploading files:', uploadingFiles)
+  console.log('Preparing files:', preparingFiles)
+  console.log('Show success message:', showSuccessMessage)
+  
+  // Log each upload's progress
+  activeUploads.forEach((upload, index) => {
+    console.log(`Upload ${index}:`, {
+      sessionId: upload.sessionId,
+      filename: upload.progress?.filename,
+      percent: upload.progress?.percent,
+      state: upload.progress?.state,
+      bytesUploaded: upload.progress?.bytesUploaded,
+      totalBytes: upload.progress?.totalBytes
+    })
+  })
+  
   return (
-    <div className="max-w-4xl mx-auto p-8">
-      {/* IMMEDIATE SUCCESS BANNER - This is the key UX improvement */}
-      {showSuccessMessage && (
-        <div className="mb-8 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-6 flex items-start space-x-4 animate-slide-down shadow-lg">
-          <div className="flex-shrink-0">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-              <CheckCircle className="w-6 h-6 text-green-600" />
+    <div className="max-w-6xl mx-auto p-8">
+      {/* Main Content Area with Side-by-Side Layout */}
+      <div className="flex gap-6">
+        {/* Upload Area */}
+        <div className="flex-1">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="p-4 border-b border-gray-200 bg-gray-50">
+              <h2 className="text-lg font-semibold text-gray-900 mb-1">Upload Documents</h2>
+              <p className="text-sm text-gray-600">
+                Files are saved instantly and upload in the background.
+              </p>
+            </div>
+
+            {/* Drop Zone */}
+            <div
+              className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all ${
+                isDragging ? 'border-purple-500 bg-purple-50' : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+              }`}
+              onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={handleDrop}
+            >
+              <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-lg font-medium text-gray-900 mb-2">
+                Drag & drop files here, or click to browse
+              </p>
+              <p className="text-sm text-gray-500 mb-6">
+                Supports PDF, DOCX, TXT, and more. Multiple files allowed.
+              </p>
+              <input
+                type="file"
+                multiple
+                onChange={handleFileSelect}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
+              <button className="bg-purple-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors">
+                Select Files
+              </button>
             </div>
           </div>
-          <div className="flex-1">
-            <div className="flex items-center space-x-2 mb-2">
-              <h3 className="text-xl font-bold text-green-900">🎉 Files Saved Successfully!</h3>
-              <Sparkles className="w-5 h-5 text-yellow-500 animate-pulse" />
-            </div>
-            <p className="text-base text-green-800 mb-4 leading-relaxed">
-              <strong>Your files are now safely stored and uploading in the background.</strong> 
-              You can navigate to other sections within Smartcat, and if you leave the website, your uploads will automatically resume when you return.
-            </p>
-            
-            {/* Navigation Suggestions */}
-            <div className="bg-white rounded-lg p-4 border border-green-200">
-              <p className="text-sm font-medium text-green-900 mb-3">💡 What would you like to do next?</p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <Link 
-                  to="/projects" 
-                  className="flex items-center justify-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-all transform hover:scale-105"
-                >
-                  <FolderOpen className="w-4 h-4" />
-                  <span>Browse Projects</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link 
-                  to="/orders" 
-                  className="flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-all transform hover:scale-105"
-                >
-                  <Clock className="w-4 h-4" />
-                  <span>View Orders</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link 
-                  to="/marketplace" 
-                  className="flex items-center justify-center space-x-2 bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 transition-all transform hover:scale-105"
-                >
-                  <File className="w-4 h-4" />
-                  <span>Explore Marketplace</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
+        </div>
+
+        {/* Success Message Sidebar */}
+        {showSuccessMessage && (
+          <div className="w-80 flex-shrink-0">
+            <div className="bg-gradient-to-b from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 h-full flex flex-col shadow-lg">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-green-900">Files Saved!</h3>
+                  <div className="flex items-center space-x-1">
+                    <span className="text-xs">🎉</span>
+                    <Sparkles className="w-3 h-3 text-yellow-500 animate-pulse" />
+                  </div>
+                </div>
+              </div>
+              
+              <p className="text-xs text-green-800 mb-4 leading-relaxed">
+                Your files are uploading in the background. You can continue working while they upload.
+              </p>
+              
+              {/* Navigation Suggestions - Vertical Layout */}
+              <div className="flex-1">
+                <p className="text-xs font-medium text-green-900 mb-2">💡 What's next?</p>
+                <div className="space-y-2">
+                  <Link 
+                    to="/projects" 
+                    className="flex items-center space-x-2 bg-green-600 text-white px-3 py-2 rounded-lg text-xs font-medium hover:bg-green-700 transition-colors w-full"
+                  >
+                    <FolderOpen className="w-3 h-3" />
+                    <span>Browse Projects</span>
+                    <ArrowRight className="w-3 h-3 ml-auto" />
+                  </Link>
+                  <Link 
+                    to="/orders" 
+                    className="flex items-center space-x-2 bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors w-full"
+                  >
+                    <Clock className="w-3 h-3" />
+                    <span>View Orders</span>
+                    <ArrowRight className="w-3 h-3 ml-auto" />
+                  </Link>
+                  <Link 
+                    to="/marketplace" 
+                    className="flex items-center space-x-2 bg-purple-600 text-white px-3 py-2 rounded-lg text-xs font-medium hover:bg-purple-700 transition-colors w-full"
+                  >
+                    <File className="w-3 h-3" />
+                    <span>Explore Marketplace</span>
+                    <ArrowRight className="w-3 h-3 ml-auto" />
+                  </Link>
+                </div>
+              </div>
+              
+              <div className="mt-4 pt-3 border-t border-green-200">
+                <div className="text-xs text-green-600 space-y-1">
+                  <div className="flex items-center space-x-1">
+                    <span>💾</span>
+                    <span>Auto-saved to account</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <span>🔄</span>
+                    <span>Background upload</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <span>📱</span>
+                    <span>Notifications enabled</span>
+                  </div>
+                </div>
               </div>
             </div>
-            
-            <div className="mt-4 text-xs text-green-600">
-              💾 Files are automatically saved to your account • 🔄 Uploads continue in background • 📱 Get notified when complete
-            </div>
           </div>
-        </div>
-      )}
-
-      {/* Upload Area */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Upload Documents</h2>
-          <p className="text-gray-600">
-            <strong>Zero waiting time:</strong> Your files are saved instantly and upload in the background while you work.
-          </p>
-        </div>
-
-        {/* Drop Zone */}
-        <div
-          className={`relative border-2 border-dashed rounded-lg p-12 text-center transition-all ${
-            isDragging ? 'border-purple-500 bg-purple-50 scale-105' : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
-          }`}
-          onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-        >
-          <Upload className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <p className="text-xl font-semibold text-gray-900 mb-2">
-            Drag & drop files here, or click to browse
-          </p>
-          <p className="text-gray-500 mb-6">
-            Supports PDF, DOCX, TXT, and more. Multiple files allowed.
-          </p>
-          <input
-            type="file"
-            multiple
-            onChange={handleFileSelect}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          />
-          <button className="bg-purple-600 text-white px-8 py-3 rounded-lg text-base font-medium hover:bg-purple-700 transition-all transform hover:scale-105 shadow-md">
-            Select Files
-          </button>
-        </div>
+        )}
       </div>
 
-      {/* Active Uploads Section - Only show when there are actual uploads */}
+      {/* Active Uploads Section - Show only when there are active uploads */}
       {hasActiveUploads && (
         <div className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold text-gray-900">
-                Active Uploads ({activeUploads.length})
+                Upload Status ({activeUploads.length})
               </h3>
               {uploadingFiles.length > 0 && (
                 <div className="flex items-center space-x-2 text-sm text-blue-600">
@@ -186,12 +227,25 @@ const EnhancedUploader: React.FC = () => {
           </div>
 
           <div className="p-6 space-y-4">
-            {Object.entries(uploads).map(([id, upload]) => {
+            {activeUploads.map((upload) => {
+              const id = upload.sessionId || ''
               const { progress } = upload
-              if (progress.state === 'completed') return null
+
+              if (!progress) return null
 
               const speedMBps = progress.speedBps ? (progress.speedBps / (1024 * 1024)).toFixed(2) : '0'
               const percentage = Math.round(progress.percent)
+              
+              // Debug logging
+              console.log('Upload progress:', {
+                id,
+                filename: progress.filename,
+                percent: progress.percent,
+                percentage,
+                state: progress.state,
+                bytesUploaded: progress.bytesUploaded,
+                totalBytes: progress.totalBytes
+              })
               
               return (
                 <div key={id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
@@ -242,9 +296,16 @@ const EnhancedUploader: React.FC = () => {
                   <div className="mb-3">
                     <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
                       <span className="font-medium">{percentage}% Complete</span>
-                      <span className="text-purple-600 font-medium">
+                      <span className={`font-medium ${
+                        progress.state === 'uploading' ? 'text-purple-600' :
+                        progress.state === 'paused' ? 'text-yellow-600' :
+                        progress.state === 'completed' ? 'text-green-600' :
+                        'text-blue-600'
+                      }`}>
                         {progress.state === 'uploading' ? 'Uploading...' : 
-                         progress.state === 'paused' ? 'Paused' : 'Preparing...'}
+                         progress.state === 'paused' ? 'Paused' : 
+                         progress.state === 'completed' ? 'Completed!' :
+                         'Preparing...'}
                       </span>
                     </div>
                     <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
@@ -252,11 +313,12 @@ const EnhancedUploader: React.FC = () => {
                         className={`h-full transition-all duration-500 ${
                           progress.state === 'error' ? 'bg-red-500' :
                           progress.state === 'paused' ? 'bg-yellow-500' :
+                          progress.state === 'completed' ? 'bg-green-500' :
                           'bg-gradient-to-r from-purple-500 to-blue-500'
                         }`}
-                        style={{ width: `${percentage}%` }}
+                        style={{ width: `${Math.max(1, percentage)}%` }}
                       >
-                        <div className="h-full bg-white/20 animate-pulse"></div>
+                        <div className={`h-full bg-white/20 ${progress.state === 'completed' ? '' : 'animate-pulse'}`}></div>
                       </div>
                     </div>
                   </div>
@@ -270,7 +332,7 @@ const EnhancedUploader: React.FC = () => {
                             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                             <span>{speedMBps} MB/s</span>
                           </span>
-                          {progress.etaSeconds > 0 && (
+                          {progress.etaSeconds && progress.etaSeconds > 0 && (
                             <span className="flex items-center space-x-1">
                               <Clock className="w-4 h-4" />
                               <span>ETA: {formatTime(progress.etaSeconds)}</span>
@@ -290,6 +352,12 @@ const EnhancedUploader: React.FC = () => {
                           <span>Preparing file for upload...</span>
                         </span>
                       )}
+                      {progress.state === 'completed' && (
+                        <span className="text-green-600 flex items-center space-x-1">
+                          <CheckCircle className="w-4 h-4" />
+                          <span>Upload completed successfully!</span>
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -299,14 +367,6 @@ const EnhancedUploader: React.FC = () => {
         </div>
       )}
 
-      {/* Minimal Smart Background Uploads Info */}
-      <div className="mt-6 bg-blue-50 rounded-lg p-4 flex items-center space-x-3">
-        <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
-        <div className="text-sm text-blue-800">
-          <p className="font-medium mb-1">Smart Background Uploads</p>
-          <p>Your files continue uploading even when you navigate to other sections. If you close your browser, we'll automatically resume from where you left off when you return.</p>
-        </div>
-      </div>
     </div>
   )
 }

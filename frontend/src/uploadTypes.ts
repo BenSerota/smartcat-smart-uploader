@@ -48,10 +48,3 @@ export type UploadItem = {
   progress?: UploadProgress
   error?: string
 }
-
-export type ToastMessage = {
-  id: string
-  type: 'success' | 'error' | 'info'
-  message: string
-  duration?: number
-}

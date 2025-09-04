@@ -42,3 +42,166 @@ Creating multipart upload - bucket: smartcat-uploads, key: uploads//TAZ1EJHK4sCi
 PUT request - uploadId: da6fa1cd-5f51-4c78-8ad8-0f2d2c8e2fe6, partNumber: 1, body type: object, isBuffer: true
 Creating multipart upload - bucket: smartcat-uploads, key: uploads//NrynTRmCcepf/chat_export_no_code.txt, uploadId: ba464317-bb88-47e6-a1a2-a97febafbe75
 PUT request - uploadId: ba464317-bb88-47e6-a1a2-a97febafbe75, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//QgYAxR1dRk1u/123SAFIR.jpg, uploadId: 53892efb-4e32-4d7b-b46a-679f9985edd0
+PUT request - uploadId: 53892efb-4e32-4d7b-b46a-679f9985edd0, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//wr3A_OiFT58x/hilyte.png, uploadId: 7cc5600c-07d7-46aa-abad-3c2ba67b7238
+PUT request - uploadId: 7cc5600c-07d7-46aa-abad-3c2ba67b7238, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//PfxXL8jK6QcJ/glossary.json, uploadId: 3230ff8f-7682-461e-a07f-d00e78cd8444
+PUT request - uploadId: 3230ff8f-7682-461e-a07f-d00e78cd8444, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//gyz1JmtahB0d/chat_export_no_code.txt, uploadId: b9fcd04d-9dce-4685-ae81-7f857f42fed8
+PUT request - uploadId: b9fcd04d-9dce-4685-ae81-7f857f42fed8, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//gZXTaJLDTJRv/hilyte.png, uploadId: df5502ed-d8ed-4f16-902b-d01af11d460b
+PUT request - uploadId: df5502ed-d8ed-4f16-902b-d01af11d460b, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//x1J2rC-s3nuE/123SAFIR.jpg, uploadId: 9ca2c95b-d100-4c03-9c94-a0f82e86ff22
+PUT request - uploadId: 9ca2c95b-d100-4c03-9c94-a0f82e86ff22, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//AQMYBiXVl7SR/chat_export_no_code.txt, uploadId: 8624a115-827d-49d5-a860-995fcf53d5a1
+PUT request - uploadId: 8624a115-827d-49d5-a860-995fcf53d5a1, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//Z6343bCnwtag/hilyte.png, uploadId: 346f33d7-2eed-4f0e-ab48-86987e85f544
+PUT request - uploadId: 346f33d7-2eed-4f0e-ab48-86987e85f544, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//LyVrgG9ieWkD/123SAFIR.jpg, uploadId: 4150e8b7-190b-412e-8620-a985a7fa804a
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//JqC2MrDwfbGh/123SAFIR.jpg, uploadId: 1ee476fa-2457-4ed7-bb00-11865e6cb087
+PUT request - uploadId: 1ee476fa-2457-4ed7-bb00-11865e6cb087, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//fr83ev6yWSsN/hilyte.png, uploadId: 0c8587ad-244c-4b24-aeed-d1bc526c3757
+PUT request - uploadId: 0c8587ad-244c-4b24-aeed-d1bc526c3757, partNumber: 1, body type: object, isBuffer: true
+Unhandled request: GET /
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//SNirdcZvxANi/123SAFIR.jpg, uploadId: 2178c467-4971-4b3a-97ff-cf6662f990db
+PUT request - uploadId: 2178c467-4971-4b3a-97ff-cf6662f990db, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//BitJFbeXBN0v/chat_full_no_code.txt, uploadId: 40ddfedd-4314-4333-aa09-34bdf6c95343
+PUT request - uploadId: 40ddfedd-4314-4333-aa09-34bdf6c95343, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//BAHsYC5bVMl1/hilyte.png, uploadId: 7d07afd5-764c-4757-a493-5c25daaa64b4
+PUT request - uploadId: 7d07afd5-764c-4757-a493-5c25daaa64b4, partNumber: 1, body type: object, isBuffer: true
+Unhandled request: GET /
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//xoixRXutyW9Y/Simplified_SAFIR_Framework.docx, uploadId: 8f591d8f-6540-441a-a5b9-ed57d2692c79
+PUT request - uploadId: 8f591d8f-6540-441a-a5b9-ed57d2692c79, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//8Ry3RC92hI6F/123SAFIR.jpg, uploadId: f1c1fa93-db07-431e-b445-29b625a0843e
+PUT request - uploadId: f1c1fa93-db07-431e-b445-29b625a0843e, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//HjwPedjdJdG4/chat_export_no_code.txt, uploadId: 8bf459ec-e21e-4955-97d5-de0a882944a4
+PUT request - uploadId: 8bf459ec-e21e-4955-97d5-de0a882944a4, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//siWk1knyU9Dx/AcroRdrSCADC2500120630_MUI.dmg, uploadId: cb32689d-c706-4f66-87b7-53bdd2f69bf0
+PUT request - uploadId: cb32689d-c706-4f66-87b7-53bdd2f69bf0, partNumber: 2, body type: object, isBuffer: true
+PUT request - uploadId: cb32689d-c706-4f66-87b7-53bdd2f69bf0, partNumber: 1, body type: object, isBuffer: true
+PUT request - uploadId: cb32689d-c706-4f66-87b7-53bdd2f69bf0, partNumber: 3, body type: object, isBuffer: true
+PUT request - uploadId: cb32689d-c706-4f66-87b7-53bdd2f69bf0, partNumber: 4, body type: object, isBuffer: true
+PUT request - uploadId: cb32689d-c706-4f66-87b7-53bdd2f69bf0, partNumber: 5, body type: object, isBuffer: true
+PUT request - uploadId: cb32689d-c706-4f66-87b7-53bdd2f69bf0, partNumber: 6, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//HC_sTGa-rYQQ/123SAFIR.jpg, uploadId: f4d6146c-6a43-49d2-b04b-38b6e6acf589
+PUT request - uploadId: f4d6146c-6a43-49d2-b04b-38b6e6acf589, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//uA6udgKkS91i/glossary.json, uploadId: cec0e482-0b95-4e6f-8692-cb3b9155fde9
+PUT request - uploadId: cec0e482-0b95-4e6f-8692-cb3b9155fde9, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//OQKgWjlYSCdx/chat_export_no_code.txt, uploadId: 9f3d05f9-8fa5-496a-b177-1673f4115007
+PUT request - uploadId: 9f3d05f9-8fa5-496a-b177-1673f4115007, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//tAfBL7ozA0Da/123SAFIR.jpg, uploadId: a0bdc476-a8fe-44b2-9938-fec2dab3c570
+PUT request - uploadId: a0bdc476-a8fe-44b2-9938-fec2dab3c570, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//FR3ugo_nGIzx/chat_full_no_code.txt, uploadId: 331827df-db0d-42ea-acda-1f26bd6a17ab
+PUT request - uploadId: 331827df-db0d-42ea-acda-1f26bd6a17ab, partNumber: 1, body type: object, isBuffer: true
+PUT request - uploadId: a0bdc476-a8fe-44b2-9938-fec2dab3c570, partNumber: 1, body type: object, isBuffer: true
+PUT request - uploadId: a0bdc476-a8fe-44b2-9938-fec2dab3c570, partNumber: 1, body type: object, isBuffer: true
+PUT request - uploadId: a0bdc476-a8fe-44b2-9938-fec2dab3c570, partNumber: 1, body type: object, isBuffer: true
+PUT request - uploadId: a0bdc476-a8fe-44b2-9938-fec2dab3c570, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//SrOprpItaARR/chat_export_no_code.txt, uploadId: 64a00247-e547-4fae-a10a-bd6d6ee6e8c9
+PUT request - uploadId: 64a00247-e547-4fae-a10a-bd6d6ee6e8c9, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//iLLxAps5QtzG/Simplified_SAFIR_Framework.docx, uploadId: 0ac41d6b-5466-4873-b460-21f5371cd309
+PUT request - uploadId: 0ac41d6b-5466-4873-b460-21f5371cd309, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//5Fn5jn73UARj/AcroRdrSCADC2500120630_MUI.dmg, uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 1, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 2, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 3, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 4, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 5, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 6, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 7, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 9, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 8, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 10, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 11, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 12, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 13, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 15, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 14, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 17, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 16, body type: object, isBuffer: true
+PUT request - uploadId: c419dcc3-daba-4504-82c1-efe44f91e42a, partNumber: 18, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//oSMNvRL4HhlP/123SAFIR.jpg, uploadId: 2fa3492e-d0bf-4f45-aebf-d34c72ae5e8c
+PUT request - uploadId: 2fa3492e-d0bf-4f45-aebf-d34c72ae5e8c, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//ATZ4V9gQ2xDY/chat_export_no_code.txt, uploadId: 62503a81-24fc-4629-b0e9-22a082edba01
+PUT request - uploadId: 62503a81-24fc-4629-b0e9-22a082edba01, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//Qj8vBZx5J62T/123SAFIR.jpg, uploadId: 06155760-a57d-487b-9ee5-9cd6e77dc753
+PUT request - uploadId: 06155760-a57d-487b-9ee5-9cd6e77dc753, partNumber: 1, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//BEA9vN1ZOTc5/AcroRdrSCADC2500120630_MUI.dmg, uploadId: be57136c-204a-48d6-97ed-1569888dccbb
+PUT request - uploadId: be57136c-204a-48d6-97ed-1569888dccbb, partNumber: 1, body type: object, isBuffer: true
+PUT request - uploadId: be57136c-204a-48d6-97ed-1569888dccbb, partNumber: 3, body type: object, isBuffer: true
+PUT request - uploadId: be57136c-204a-48d6-97ed-1569888dccbb, partNumber: 2, body type: object, isBuffer: true
+PUT request - uploadId: be57136c-204a-48d6-97ed-1569888dccbb, partNumber: 4, body type: object, isBuffer: true
+PUT request - uploadId: be57136c-204a-48d6-97ed-1569888dccbb, partNumber: 5, body type: object, isBuffer: true
+PUT request - uploadId: be57136c-204a-48d6-97ed-1569888dccbb, partNumber: 6, body type: object, isBuffer: true
+PUT request - uploadId: be57136c-204a-48d6-97ed-1569888dccbb, partNumber: 7, body type: object, isBuffer: true
+PUT request - uploadId: be57136c-204a-48d6-97ed-1569888dccbb, partNumber: 9, body type: object, isBuffer: true
+PUT request - uploadId: be57136c-204a-48d6-97ed-1569888dccbb, partNumber: 8, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//VGzqZaa5SvFv/AcroRdrSCADC2500120630_MUI.dmg, uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 1, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 2, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 3, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 5, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 4, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 6, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 7, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 8, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 9, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 10, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 11, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 12, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 13, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 14, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 15, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 16, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 17, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 18, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 19, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 20, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 21, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 22, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 23, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 24, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 25, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 26, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 27, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 28, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 29, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 30, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 31, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 33, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 32, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 34, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 35, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 36, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 37, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 38, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 39, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 40, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 41, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 42, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 43, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 45, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 44, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//oY2wElUEbo3C/chat_export_no_code.txt, uploadId: 01e3c02c-7f65-480e-9c7c-01ae23c4d172
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 46, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 47, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 48, body type: object, isBuffer: true
+PUT request - uploadId: 01e3c02c-7f65-480e-9c7c-01ae23c4d172, partNumber: 1, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 49, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 50, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 51, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 52, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 53, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 54, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 56, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 55, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 57, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 58, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 59, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 60, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 61, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 62, body type: object, isBuffer: true
+PUT request - uploadId: 52e465e6-acfe-45cd-9558-8e255c10cff8, partNumber: 63, body type: object, isBuffer: true
+Creating multipart upload - bucket: smartcat-uploads, key: uploads//gmHlH7JZYze0/chat_full_no_code.txt, uploadId: 2b1d2d40-3b33-4743-98ea-59fad29b3e93
+PUT request - uploadId: 2b1d2d40-3b33-4743-98ea-59fad29b3e93, partNumber: 1, body type: object, isBuffer: true
